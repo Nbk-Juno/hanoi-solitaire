@@ -186,6 +186,36 @@ class HanoiGame:
 
         return True
 
+    def is_game_won(self):
+        """
+        Check if the game is won.
+
+        Game is won when all 9 cards are in a single pile,
+        stacked in perfect descending order (9 at bottom, Ace at top).
+
+        Returns:
+            bool: True if game is won, False otherwise
+        """
+        # Find which pile has cards (should be exactly one with 9 cards)
+        full_pile = None
+        for pile in self.piles:
+            if pile.size() == 9:
+                full_pile = pile
+            elif pile.size() > 0:
+                # If any other pile has cards, game is not won
+                return False
+
+        # If no pile has 9 cards, game is not won
+        if full_pile is None:
+            return False
+
+        # Check if cards are in perfect descending order
+        # Cards should be [9, 8, 7, 6, 5, 4, 3, 2, 1] from bottom to top
+        expected_values = [9, 8, 7, 6, 5, 4, 3, 2, 1]
+        actual_values = [card.value for card in full_pile.cards]
+
+        return actual_values == expected_values
+
     def __repr__(self):
         return f"HanoiGame(moves={self.move_count})"
 
