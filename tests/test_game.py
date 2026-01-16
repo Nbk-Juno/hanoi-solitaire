@@ -610,3 +610,140 @@ def test_is_game_won_after_moves():
 
     # Now should be won
     assert game.is_game_won()
+
+
+# ============================================================================
+# Undo Tests
+# ============================================================================
+
+def test_undo_reverses_move():
+    """Test that undo reverses a move correctly."""
+    game = HanoiGame()
+
+    # Set up known state
+    game.piles = [Pile(), Pile(), Pile()]
+    game.piles[0].push(Card("5", "hearts"))
+    game.piles[1].push(Card("9", "hearts"))
+
+    # Make a move
+    game.make_move(0, 1)
+
+    # Verify move happened
+    assert game.piles[0].is_empty()
+    assert game.piles[1].size() == 2
+    assert game.piles[1].peek().rank == "5"
+
+    # Undo the move
+    result = game.undo()
+
+    # Verify undo worked
+    assert result is True
+    assert game.piles[0].size() == 1
+    assert game.piles[0].peek().rank == "5"
+    assert game.piles[1].size() == 1
+    assert game.piles[1].peek().rank == "9"
+
+
+def test_undo_decrements_counter():
+    """Test that undo decrements the move counter."""
+    game = HanoiGame()
+
+    # Set up and make a move
+    game.piles = [Pile(), Pile(), Pile()]
+    game.piles[0].push(Card("A", "hearts"))
+    game.piles[1].push(Card("5", "hearts"))
+
+    game.make_move(0, 1)
+    move_count_after_move = game.move_count
+
+    # Undo
+    game.undo()
+
+    # Verify counter decremented
+    assert game.move_count == move_count_after_move - 1
+
+
+def test_undo_updates_history():
+    """Test that undo removes move from history."""
+    game = HanoiGame()
+
+    # Set up and make moves
+    game.piles = [Pile(), Pile(), Pile()]
+    game.piles[0].push(Card("A", "hearts"))
+    game.piles[1].push(Card("5", "hearts"))
+
+    game.make_move(0, 1)
+    game.make_move(1, 2)
+
+    # Verify history has 2 moves
+    assert len(game.move_history) == 2
+
+    # Undo once
+    game.undo()
+
+    # Verify history has 1 move
+    assert len(game.move_history) == 1
+    assert game.move_history[0] == (0, 1)
+
+
+def test_undo_empty_history_returns_false():
+    """Test that undo returns False when there are no moves to undo."""
+    game = HanoiGame()
+
+    # Clear history
+    game.move_history = []
+
+    # Try to undo
+    result = game.undo()
+
+    # Should return False
+    assert result is False
+
+
+def test_multiple_undos():
+    """Test that multiple undos work in sequence."""
+    game = HanoiGame()
+
+    # Set up
+    game.piles = [Pile(), Pile(), Pile()]
+    game.piles[0].push(Card("9", "hearts"))
+    game.piles[0].push(Card("5", "hearts"))
+    game.piles[0].push(Card("A", "hearts"))
+
+    # Make 3 moves
+    game.make_move(0, 1)  # Move A to pile 1
+    game.make_move(0, 2)  # Move 5 to pile 2
+    game.make_move(1, 2)  # Move A to pile 2
+
+    # State after moves:
+    # Pile 0: [9]
+    # Pile 1: []
+    # Pile 2: [5, A]
+    assert game.piles[0].size() == 1
+    assert game.piles[1].size() == 0
+    assert game.piles[2].size() == 2
+    assert game.move_count == 3
+
+    # Undo first move (reverse: A from pile 2 to pile 1)
+    result1 = game.undo()
+    assert result1 is True
+    assert game.piles[2].size() == 1
+    assert game.piles[1].size() == 1
+    assert game.piles[1].peek().rank == "A"
+    assert game.move_count == 2
+
+    # Undo second move (reverse: 5 from pile 2 to pile 0)
+    result2 = game.undo()
+    assert result2 is True
+    assert game.piles[2].size() == 0
+    assert game.piles[0].size() == 2
+    assert game.piles[0].peek().rank == "5"
+    assert game.move_count == 1
+
+    # Undo third move (reverse: A from pile 1 to pile 0)
+    result3 = game.undo()
+    assert result3 is True
+    assert game.piles[1].size() == 0
+    assert game.piles[0].size() == 3
+    assert game.piles[0].peek().rank == "A"
+    assert game.move_count == 0

@@ -216,6 +216,32 @@ class HanoiGame:
 
         return actual_values == expected_values
 
+    def undo(self):
+        """
+        Undo the last move.
+
+        Returns:
+            bool: True if undo was successful, False if no moves to undo
+        """
+        if not self.move_history:
+            return False
+
+        # Get last move
+        from_pile_idx, to_pile_idx = self.move_history.pop()
+
+        # Reverse the move (swap from and to)
+        to_pile = self.piles[to_pile_idx]
+        from_pile = self.piles[from_pile_idx]
+
+        # Move card back
+        card = to_pile.pop()
+        from_pile.push(card)
+
+        # Decrement move counter
+        self.move_count -= 1
+
+        return True
+
     def __repr__(self):
         return f"HanoiGame(moves={self.move_count})"
 
