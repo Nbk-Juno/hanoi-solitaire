@@ -1,5 +1,3 @@
-"""Comprehensive unit tests for Hanoi Solitaire game logic."""
-
 import pytest
 from src.game import Card, Pile, HanoiGame
 
@@ -7,6 +5,7 @@ from src.game import Card, Pile, HanoiGame
 # ============================================================================
 # Card Tests
 # ============================================================================
+
 
 def test_card_creation():
     """Test basic card creation with rank and suit."""
@@ -73,6 +72,7 @@ def test_card_invalid_rank():
 # ============================================================================
 # Pile Tests
 # ============================================================================
+
 
 def test_pile_creation():
     """Test creating an empty pile."""
@@ -147,6 +147,7 @@ def test_pile_peek_empty_returns_none():
 # HanoiGame Initialization Tests
 # ============================================================================
 
+
 def test_game_initialization():
     """Test that game initializes properly."""
     game = HanoiGame()
@@ -203,6 +204,7 @@ def test_game_randomization():
 # ============================================================================
 # Move Validation Tests
 # ============================================================================
+
 
 def test_is_valid_move_smaller_on_larger():
     """Test that smaller card can be placed on larger card."""
@@ -286,6 +288,7 @@ def test_is_valid_move_invalid_indices():
 # ============================================================================
 # Move Execution Tests
 # ============================================================================
+
 
 def test_make_move_success():
     """Test successful move execution."""
@@ -406,6 +409,7 @@ def test_make_move_invalid_no_state_change():
 # Reset Tests
 # ============================================================================
 
+
 def test_reset_clears_piles():
     """Test that reset creates new pile configuration."""
     game = HanoiGame()
@@ -493,6 +497,7 @@ def test_reset_creates_new_distribution():
 # ============================================================================
 # Win Condition Tests
 # ============================================================================
+
 
 def test_is_game_won_perfect_sequence():
     """Test that game is won with perfect descending sequence in one pile."""
@@ -615,6 +620,7 @@ def test_is_game_won_after_moves():
 # ============================================================================
 # Undo Tests
 # ============================================================================
+
 
 def test_undo_reverses_move():
     """Test that undo reverses a move correctly."""
