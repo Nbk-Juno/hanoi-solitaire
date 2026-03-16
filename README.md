@@ -1,6 +1,6 @@
 # Hanoi Solitaire 🃏
 
-A Python-based implementation of Hanoi Solitaire with a graphical user interface. Built as part of [boot.dev's Back-End Developer course](https://boot.dev) to practice object-oriented programming, game logic, and GUI development.
+A Python-based implementation of Hanoi Solitaire with a graphical user interface. Built to practice object-oriented programming, game logic, and GUI development.
 
 ![Hanoi Solitaire](<img width="885" height="705" alt="Screenshot 2026-03-16 at 8 50 24 AM" src="https://github.com/user-attachments/assets/fe59ef74-f429-4cf5-a5fb-5115cfedcbd2" />)
 
